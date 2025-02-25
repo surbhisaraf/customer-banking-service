@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 
-
 @Entity(name = "users")
 public class User {
 
@@ -27,10 +26,8 @@ public class User {
     @Size(max = 120)
     private String password;
 
-
     @NotBlank
     private String role = "customer";
-
 
     public User() {}
 

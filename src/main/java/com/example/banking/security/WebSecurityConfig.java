@@ -15,8 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,13 +28,8 @@ public class WebSecurityConfig{
 
     @Bean
     public AuthTokenFilter tokenFilter() {
-        return new AuthTokenFilter(); // Returns a new instance of AuthTokenFilter
+        return new AuthTokenFilter();
     }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(); // Returns a new instance of BCryptPasswordEncoder
-//    }
 
 
     @Bean
@@ -47,7 +40,7 @@ public class WebSecurityConfig{
         ).headers(headers -> headers
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
         );
-        http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
+        http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")))
@@ -69,7 +62,6 @@ public class WebSecurityConfig{
     private AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailService); // Load user from DB
-        //authProvider.setPasswordEncoder(passwordEncoder()); // Hash and validate password
         return authProvider;
     }
 

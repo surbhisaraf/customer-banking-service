@@ -1,6 +1,5 @@
 package com.example.banking.services;
 
-import com.example.banking.models.User;
 import com.example.banking.payload.request.LoginRequest;
 import com.example.banking.payload.response.JwtResponse;
 import com.example.banking.security.JwtUtils;
@@ -23,30 +22,31 @@ public class AuthService {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired private AuthenticationManager authManager;
+    @Autowired
+    private AuthenticationManager authManager;
 
     public JwtResponse authenticateUser(LoginRequest loginRequest) throws BadCredentialsException {
 
         try {
-          UsernamePasswordAuthenticationToken authInputToken =
-                  new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+            UsernamePasswordAuthenticationToken authInputToken =
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
-          Authentication auth = authManager.authenticate(authInputToken);
+            Authentication auth = authManager.authenticate(authInputToken);
 
-          String jwt = jwtUtils.generateJwtToken(auth);
+            String jwt = jwtUtils.generateJwtToken(auth);
 
-          UserDetails user = (UserDetails) auth.getPrincipal();
+            UserDetails user = (UserDetails) auth.getPrincipal();
 
             String role = user.getAuthorities()
                     .stream()
                     .map(GrantedAuthority::getAuthority)
-                    .findFirst() // Get the first (and only) role
+                    .findFirst()
                     .orElseThrow(() -> new RuntimeException("Role not found for the user"));
 
-          return new JwtResponse(jwt, user.getUsername(), role);
-      } catch (AuthenticationException e) {
-          throw new BadCredentialsException("Invalid username or password");
-      }
+            return new JwtResponse(jwt, user.getUsername(), role);
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
     }
 
 }

@@ -1,13 +1,12 @@
 package com.example.banking.payload.response;
 
-
 import java.io.Serializable;
 
 public class JwtResponse implements Serializable {
     private String token;
     private String type;
-   // private String id;
     private String username;
+    private String role;
 
     public String getToken() {
         return token;
@@ -40,9 +39,6 @@ public class JwtResponse implements Serializable {
     public void setRole(String role) {
         this.role = role;
     }
-
-    // private String email;
-    private String role;
 
 	public JwtResponse(String token, String username, String role) {
             this.token = token;

@@ -1,15 +1,9 @@
 package com.example.banking.models;
 
-
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-
-
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Entity(name = "account")
 public class Account {

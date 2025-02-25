@@ -13,7 +13,7 @@ public class GenericResponse<T> {
     private T data;
 
     public GenericResponse(String message) {
-        this(message, null); // Call the second constructor with `null`
+        this(message, null);
     }
 
     public GenericResponse(String message, T data) {
