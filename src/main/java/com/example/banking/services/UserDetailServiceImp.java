@@ -21,7 +21,7 @@ public class UserDetailServiceImp implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws ResourceNotFoundException {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User Not Found with username: " + username));
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found for username: " + username));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),

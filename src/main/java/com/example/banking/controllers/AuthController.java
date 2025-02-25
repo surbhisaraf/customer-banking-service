@@ -19,6 +19,6 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         JwtResponse jwtResponse = authService.authenticateUser(loginRequest);
-        return ResponseEntity.status(200).body(new GenericResponse<>("loggedin successfully", jwtResponse));
+        return ResponseEntity.status(200).body(new GenericResponse<>("Successfully logged in", jwtResponse));
     }
 }

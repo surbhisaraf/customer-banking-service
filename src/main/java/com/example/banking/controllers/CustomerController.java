@@ -29,7 +29,7 @@ public class CustomerController {
     @GetMapping("/accounts")
     public ResponseEntity<?> getCustomerAccountList() {
         List<Account> accountList = customerService.getCustomerAccountList();
-        return ResponseEntity.status(200).body(new GenericResponse<>("Customer account fetched successfully", accountList));
+        return ResponseEntity.status(200).body(new GenericResponse<>("Successfully fetched customer accounts", accountList));
     }
 
     @PostMapping("/deposit")
@@ -37,21 +37,21 @@ public class CustomerController {
         customerService.validate(depositReq, "deposit");
         logger.error("validation pass");
         Account depositedAmount = customerService.depositAmount(depositReq);
-        return ResponseEntity.status(201).body(new GenericResponse<>("Amount deposited successfully", depositedAmount));
+        return ResponseEntity.status(201).body(new GenericResponse<>("Deposit successful", depositedAmount));
     }
 
     @PostMapping("/withdraw")
     public ResponseEntity<?> withdraw(@Valid @RequestBody TransactionRequest withdrawReq) {
         customerService.validate(withdrawReq, "withdraw");
         Account withdrawAmount = customerService.withdrawAmount(withdrawReq);
-        return ResponseEntity.status(200).body(new GenericResponse<>("Successfully withdraw amount", withdrawAmount));
+        return ResponseEntity.status(200).body(new GenericResponse<>("Withdrawal successful", withdrawAmount));
     }
 
     @PostMapping("/transfer")
     public ResponseEntity<?> transfer(@Valid @RequestBody TransactionRequest transferReq) {
         customerService.validate(transferReq, "transfer");
         BigDecimal amountTransfer = customerService.transferAmount(transferReq);
-        return ResponseEntity.status(200).body(new GenericResponse<>("Successfully transfer", amountTransfer));
+        return ResponseEntity.status(200).body(new GenericResponse<>("Transfer successful", amountTransfer));
     }
 
 }

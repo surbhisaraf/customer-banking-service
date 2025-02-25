@@ -40,7 +40,9 @@ public class AuthServiceTest {
     private AuthService authService;
 
     private LoginRequest mockLoginRequest;
+
     private UserDetails mockUserDetails;
+
     private String mockJwtToken = "mocked-jwt-token";
 
     @BeforeEach
@@ -49,7 +51,7 @@ public class AuthServiceTest {
         mockLoginRequest.setUsername("testUser");
         mockLoginRequest.setPassword("testPassword");
 
-        mockUserDetails = new User("testUser", "testPassword", List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        mockUserDetails = new User("testUser", "testPassword", List.of(new SimpleGrantedAuthority("customer")));
     }
 
     @Test
@@ -62,7 +64,7 @@ public class AuthServiceTest {
 
         assertNotNull(response);
         assertEquals("testUser", response.getUsername());
-        assertEquals("ROLE_USER", response.getRole());
+        assertEquals("customer", response.getRole());
         assertEquals(mockJwtToken, response.getToken());
     }
 

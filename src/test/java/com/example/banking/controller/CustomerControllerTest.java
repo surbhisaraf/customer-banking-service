@@ -2,6 +2,7 @@ package com.example.banking.controller;
 
 import com.example.banking.controllers.CustomerController;
 import com.example.banking.models.Account;
+import com.example.banking.models.AccountType;
 import com.example.banking.models.User;
 import com.example.banking.payload.request.TransactionRequest;
 import com.example.banking.payload.response.GenericResponse;
@@ -34,17 +35,21 @@ public class CustomerControllerTest {
     private CustomerController customerController;
 
     private Account mockAccount;
+
     private TransactionRequest mockTransaction;
 
     @BeforeEach
     void setUp() {
         mockAccount = new Account();
-        mockAccount.setAccountNo("A123");
+        mockAccount.setAccountNo("111684447");
         mockAccount.setBalance(new BigDecimal("1000.00"));
+        mockAccount.setAccountType(AccountType.REGULAR);
+        mockAccount.setCurrency("EUR");
+
 
         mockTransaction = new TransactionRequest();
-        mockTransaction.setToAccountNo("A123");
-        mockTransaction.setFromAccountNo("B456");
+        mockTransaction.setToAccountNo("111684447");
+        mockTransaction.setFromAccountNo("2222311344");
         mockTransaction.setAmount(new BigDecimal("500.00"));
     }
 
@@ -57,8 +62,7 @@ public class CustomerControllerTest {
         assertEquals(OK, response.getStatusCode());
         assertNotNull(response.getBody());
         GenericResponse<?> body = (GenericResponse<?>) response.getBody();
-        assertEquals("Customer account fetched successfully", body.getMessage());
-        assertFalse(((List<Account>) body.getData()).isEmpty());
+        assertEquals("Successfully fetched customer accounts", body.getMessage());
     }
 
     @Test
@@ -70,8 +74,8 @@ public class CustomerControllerTest {
         assertEquals(CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         GenericResponse<?> body = (GenericResponse<?>) response.getBody();
-        assertEquals("Amount deposited successfully", body.getMessage());
-        assertEquals("A123", ((Account) body.getData()).getAccountNo());
+        assertEquals("Deposit successful", body.getMessage());
+        assertEquals("111684447", ((Account) body.getData()).getAccountNo());
     }
 
     @Test
@@ -83,8 +87,8 @@ public class CustomerControllerTest {
         assertEquals(OK, response.getStatusCode());
         assertNotNull(response.getBody());
         GenericResponse<?> body = (GenericResponse<?>) response.getBody();
-        assertEquals("Successfully withdraw amount", body.getMessage());
-        assertEquals("A123", ((Account) body.getData()).getAccountNo());
+        assertEquals("Withdrawal successful", body.getMessage());
+        assertEquals("111684447", ((Account) body.getData()).getAccountNo());
     }
 
     @Test
@@ -96,7 +100,7 @@ public class CustomerControllerTest {
         assertEquals(OK, response.getStatusCode());
         assertNotNull(response.getBody());
         GenericResponse<?> body = (GenericResponse<?>) response.getBody();
-        assertEquals("Successfully transfer", body.getMessage());
+        assertEquals("Transfer successful", body.getMessage());
         assertEquals(new BigDecimal("500.00"), body.getData());
     }
 

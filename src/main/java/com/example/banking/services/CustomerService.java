@@ -65,10 +65,10 @@ public class CustomerService {
             throw new ResourceNotFoundException("Account not found");
         }
         if (!account.get().getCustomer().getUser().getUsername().equals(getLoggedInUser())) {
-            throw new IllegalArgumentException("Deposit is not permitted to other customer's account");
+            throw new IllegalArgumentException("Deposit not allowed: Cannot deposit funds into another customer's account");
         }
         if (depositReq.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be greater than zero");
+            throw new IllegalArgumentException("Amount must be greater than zero");
         }
 
         Account updatedAccount = account.get();
@@ -88,10 +88,10 @@ public class CustomerService {
             throw new ResourceNotFoundException("Account not found");
         }
         if (!account.get().getCustomer().getUser().getUsername().equals(getLoggedInUser())) {
-            throw new InvalidTransactionException("withdraw is not permitted from other customer's account");
+            throw new InvalidTransactionException("Withdrawal denied: Unauthorized access to account");
         }
         if (account.get().getAccountType() == AccountType.SAVING) {
-            throw new InvalidTransactionException("withdraw is not permitted from savings account");
+            throw new InvalidTransactionException("Withdrawal denied: Not permitted from savings account");
         }
         Account updatedAccount = account.get();
         BigDecimal currentBalance = updatedAccount.getBalance();
@@ -112,37 +112,37 @@ public class CustomerService {
         Optional<Account> senderAccount = accountRepository.findByAccountNo(transferReq.getFromAccountNo());
         if (senderAccount.isEmpty()) {
             logger.error("Account not found with: {}", transferReq.getFromAccountNo());
-            throw new ResourceNotFoundException("Sender account not found");
+            throw new ResourceNotFoundException("Sender's account not found");
         }
         Optional<Account> receiverAccount = accountRepository.findByAccountNo(transferReq.getToAccountNo());
 
         if (receiverAccount.isEmpty()) {
             logger.error("Account not found with: {}", transferReq.getToAccountNo());
-            throw new ResourceNotFoundException("Receivers account not found");
+            throw new ResourceNotFoundException("Receiver's account not found");
         }
 
         Account fromAccount = senderAccount.get();
         Account toAccount = receiverAccount.get();
 
         if (fromAccount.getAccountType() == AccountType.SAVING) {
-            throw new InvalidTransactionException("transfer is not permitted from savings account");
+            throw new InvalidTransactionException("Transfer not allowed: Transfers from a savings account are not permitted");
         }
 
         boolean isSameCustomer = fromAccount.getCustomer().getId()
                 .equals(toAccount.getCustomer().getId());
 
         if (isSameCustomer && transferReq.getAmount().compareTo(new BigDecimal("100000")) > 0) {
-            throw new InvalidTransactionException("transfer is not permitted for more than 100,000 EUR between same customer accounts");
+            throw new InvalidTransactionException("Transfer limit exceeded: Transfers between your own accounts cannot exceed 100,000 EUR");
         }
 
         if (!isSameCustomer && transferReq.getAmount().compareTo(new BigDecimal("15000")) > 0) {
-            throw new InvalidTransactionException("transfer is not permitted for more than 15,000 EUR to another customer's account");
+            throw new InvalidTransactionException("Transfer limit exceeded: Transfers to another customer's account cannot exceed 15,000 EUR");
         }
         if (!fromAccount.getCustomer().getUser().getUsername().equals(getLoggedInUser())) {
-            throw new InvalidTransactionException("transfer is not permitted from other customer's account");
+            throw new InvalidTransactionException("Unauthorized transfer: Cannot transfer funds from another customer's account");
         }
         if (fromAccount.getBalance().compareTo(transferReq.getAmount()) < 0) {
-            throw new InvalidTransactionException("Insufficient balance in sender's account");
+            throw new InvalidTransactionException("Insufficient balance in account");
         }
 
 
@@ -160,13 +160,13 @@ public class CustomerService {
     public void validate(TransactionRequest transactionRequest, String action) {
 
         if (action.equalsIgnoreCase("deposit") && isInvalidAccount(transactionRequest.getToAccountNo())) {
-            throw new InvalidTransactionException("deposit account no is invalid");
+            throw new InvalidTransactionException("Account number for deposit is invalid");
         }
         if (action.equalsIgnoreCase("withdraw") && isInvalidAccount(transactionRequest.getFromAccountNo())) {
-            throw new InvalidTransactionException("withdraw account no is invalid");
+            throw new InvalidTransactionException("Account number for withdrawal is invalid");
         }
         if (action.equalsIgnoreCase("transfer") && (isInvalidAccount(transactionRequest.getToAccountNo()) || isInvalidAccount(transactionRequest.getFromAccountNo()))) {
-            throw new InvalidTransactionException("transfer account no is invalid");
+            throw new InvalidTransactionException("Aaccount number for transfer is invalid");
         }
     }
 
