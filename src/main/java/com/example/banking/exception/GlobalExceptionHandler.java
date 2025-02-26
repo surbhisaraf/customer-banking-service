@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTransactionException.class)
     public ResponseEntity<GenericResponse<String>> handleInvalidTransactionException(InvalidTransactionException ex) {
-        return new ResponseEntity<>(new GenericResponse<>("Invalid Transaction", ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new GenericResponse<>("Invalid Transaction", ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

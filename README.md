@@ -146,6 +146,7 @@ POST /api/auth/signin
 ```
 Authorization: Bearer <jwt-token>
 ```
+- Expiration of the jwt token is set at 15 minutes. User has to login again to get a new token.
 
 ---
 
