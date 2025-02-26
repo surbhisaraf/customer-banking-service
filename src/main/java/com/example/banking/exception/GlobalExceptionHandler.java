@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
                 })
                 .toList();
 
-        return new ResponseEntity<>(new GenericResponse<>("Validation failed:", errors), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new GenericResponse<>("Validation failed", errors), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -49,7 +49,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<GenericResponse<String>> handleAuthenticationException(AuthenticationException ex) {
-        return new ResponseEntity<>(new GenericResponse<>("Authentication failed:", ex.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new GenericResponse<>("Authentication failed", ex.getMessage()), HttpStatus.UNAUTHORIZED);
+
+    }
+
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<GenericResponse<String>> handleInvalidJwtException(InvalidJwtException ex) {
+        return new ResponseEntity<>(new GenericResponse<>("Authentication failed", ex.getMessage()), HttpStatus.UNAUTHORIZED);
 
     }
 }

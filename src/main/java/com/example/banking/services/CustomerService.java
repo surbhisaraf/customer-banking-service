@@ -166,7 +166,7 @@ public class CustomerService {
             throw new InvalidTransactionException("Account number for withdrawal is invalid");
         }
         if (action.equalsIgnoreCase("transfer") && (isInvalidAccount(transactionRequest.getToAccountNo()) || isInvalidAccount(transactionRequest.getFromAccountNo()))) {
-            throw new InvalidTransactionException("Aaccount number for transfer is invalid");
+            throw new InvalidTransactionException("Account number for transfer is invalid");
         }
     }
 
