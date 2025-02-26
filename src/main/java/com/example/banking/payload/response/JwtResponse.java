@@ -42,7 +42,7 @@ public class JwtResponse implements Serializable {
 
 	public JwtResponse(String token, String username, String role) {
             this.token = token;
-            this.type = "Bearer ";
+            this.type = "Bearer";
             this.username=username;
             this.role = role;
         }
